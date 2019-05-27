@@ -1,0 +1,161 @@
+\documentclass{book}
+\usepackage[margin=1in,footskip=0.25in]{geometry}
+\usepackage{pgf, tikz}
+\usepackage{amsmath}
+\usepackage{centernot}
+\usepackage{pgfplots}
+\usepackage{amssymb}
+
+\usetikzlibrary{arrows, automata}
+
+\title{MAC2311-0004: Calc I}
+\author{Ahmet}
+
+\begin{document}
+\newcommand{\vasymptote}[2][]{
+    \draw [densely dashed,#1] ({rel axis cs:0,0} -| {axis cs:#2,0}) -- ({rel axis cs:0,1} -| {axis cs:#2,0});
+}
+
+\pgfplotsset{
+    double y domain/.code 2 args={
+        \pgfmathsetmacro\doubleymin{#1*2}
+        \pgfmathsetmacro\doubleymax{#2*2}
+    },
+    ejes/.style args={#1:#2 #3:#4}{
+        samples=100,
+        enlargelimits=false,
+        axis lines=middle,
+        scale only axis,
+        width=4cm,
+        height=4cm
+    }
+}
+
+\noindent Introduction to Calculus\\\\
+\emph{Definition 0.1} The line \textbf{tangent} to a curve at a point is the line that "best approximates" the curve at that point.\\
+
+\noindent\emph{Definition 0.2.1} The \textbf{average velocity} of an object over a given interval of time is the change in the position divided by the change in time.
+\begin{center}
+$$v_{ave} = \frac{\Delta s}{\Delta t} = \frac{s(t_2) - s(t_1)}{t_2 - t_1}$$
+\end{center}
+
+\noindent\emph{Definition 0.2.2} The \textbf{instantaneous velocity} of an object at a given time, t = a, is the limiting value of the average velocity over the time interval from t to a, as t approaches a.\\\\
+$$\lim_{t_2 \to t_1} \frac{s(t_2) - s(t_1)}{t_2 - t_1}$$
+\newline\noindent\emph{Definition 1.1} The \textbf{limit} of f(x), as x approaches a, equals L. This means that as x gets close to the value of a, but never equals a, the value of f(x) gets closer to the value L.
+$$\lim_{x \to \infty} f(x) = L$$
+\newline\noindent\emph{Definition 2.1} The \textbf{left limit} of f(x), as x approaches a, equals L. This means that x approaches a AND \newline x $<$ a
+$$\lim_{x \to a^-} f(x) = L$$
+\newline\noindent\emph{Definition 2.2} The \textbf{right limit} of f(x), as x approaches a, equals L. This means that x approaches a AND \newline x $>$ a
+$$\lim_{x \to a^+} f(x) = L$$
+
+\noindent Remember, when trying to see if a limit approaches infinity, try to visualize the graph.\\
+\begin{center}
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis lines=middle,
+			xtick=\empty,
+			ytick=\empty,
+			clip=false
+		]
+		\addplot+[no marks,blue,line width=1pt,samples=150,domain=0.1:7] {ln(x)};
+		\node[right,black] at (axis cs:0.2,1.8) {\textbf{\textit{ln x}}};
+		\node[below,black] at (axis cs:7,-0.2) {\textbf{\textit{x}}};
+		\end{axis}
+	\end{tikzpicture}
+\end{center}
+The limit of \emph{natural logs} will result in $\infty$ because the graph tends toward infinity.
+\begin{center}
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis lines=middle,
+			xtick=\empty,
+			ytick=\empty,
+			clip=false,
+			restrict y to domain=-5:5,
+			domain=-10:10,
+			extra x ticks={-2, 5},
+			extra y ticks={-4, 2, 4},
+			ejes=-10:10 -10:10,
+			]
+			\vasymptote {5};
+			\addplot[samples=200,dashed,latex-latex] {1};
+			\addplot+[no marks,blue,line width=1pt,samples=150, domain=-10:10] {(x*x - 2*x - 8)/(x*x - 3*x - 10)};
+		\end{axis}
+	\end{tikzpicture}
+\end{center}
+Given the equation for the graph above, determine the limits as x at the given value?
+$$y=\frac{x^2 - 2x - 8}{x^2 - 3x - 10}$$ 
+\begin{center}
+	$$ \lim_{x \to 5^-} \frac{x^2 - 2x - 8}{x^2 - 3x - 10} = - \infty $$
+	$$ \lim_{x \to 5^+} \frac{x^2 - 2x - 8}{x^2 - 3x - 10} = \infty $$
+	$$ \lim_{x \to 5} \frac{x^2 - 2x - 8}{x^2 - 3x - 10} = DNE $$
+	$$ \lim_{x \to -2^-} \frac{x^2 - 2x - 8}{x^2 - 3x - 10} = \frac{x - 4}{x - 5}  = \frac{-2 - 4}{-2 - 5}  = \frac{6}{7} $$
+\end{center}
+
+\noindent\emph{Theorem 1.1} The \textbf{Common Sense Limit Laws}: Given \emph{c} is a constant and $\forall \lim_{x \to a} f(x) \in \mathbb{R}$ 
+\begin{center}
+	$$ (1) \lim_{x \to a} [f(x) + g(x)] = \lim_{x \to a} f(x) + \lim_{x \to a} g(x) $$
+	$$ (2) \lim_{x \to a} [f(x) - g(x)] = \lim_{x \to a} f(x) - \lim_{x \to a} g(x) $$
+	$$ (3) \lim_{x \to a} cf(x) = c * \lim_{x \to a} f(x) $$
+	$$ (4) \lim_{x \to a} [f(x)g(x)] = \lim_{x \to a} f(x) * \lim_{x \to a} g(x) $$
+	$$ (5) \lim_{x \to a} \frac{f(x)}{g(x)} = \frac{\lim_{x \to a} f(x)}{\lim_{x \to a} g(x)} $$
+	$$ (6) \lim_{x \to a} [f(x)^n] = [\lim_{x \to a} f(x)]^n $$
+\end{center}
+
+Solve the following, given that $\lim_{x \to 2} f(x) = 1$, $\lim_{x \to 2} g(x) = -5$, $\lim_{x \to 2} h(x) = 0$:
+$$ \lim_{x \to 2} [f(x) + 5g(x)] = \lim_{x \to 2} f(x) + 5 * \lim_{x \to 2} g(x) = 1 + 5*(-5) = -24 $$
+$$ \lim_{x \to 2} \sqrt{f(x)} = \sqrt{\lim_{x \to a} f(x)} = \sqrt{1} = 1 $$
+$$ \lim_{x \to 2} \sqrt{\frac{3x^2 + 4}{5x - 1}} = \sqrt{\frac{\lim_{x \to 2} (3x^2 + 4)}{\lim_{x \to 2} (5x - 1)}} = \sqrt{\frac{3(2)^2 + 4}{5(2) - 1}} = \sqrt{\frac{16}{9}} = \frac{4}{3}$$
+\\ \\
+\noindent\emph{Theorem 2.1} if f(x) = g(x) for all x in an open interval containing a, execpt possibly at a, then $$ \lim_{x \to a}f(x) = \lim_{x \to a}g(x) $$
+\noindent\emph{\textbf{FACT}} To start a limit exercise in the form $\lim_{x \to a}f(x)$ where we have algebraic expressions for \emph{f(x)} involving the usual operations, begin by pluggin in \emph{a} to see what form you get. Depending on the result we will take different approaches.
+\begin{enumerate}
+	\item $f(a)$ is a real number:
+	\begin{enumerate}
+		\item The limit of $f(a)$ is \emph{c}. $\lim_{x \to a}f(a) = c$
+	\end{enumerate}
+	\item $f(a)$ results in $\frac{c}{0}$ where $c \neq 0$
+	\begin{enumerate}
+		\item \[ \lim_{x \to a} f(x) \begin{cases} 
+      			\infty & c > 0 \\
+      			-\infty & c < 0
+   				\end{cases}
+			  \]
+	\end{enumerate}
+	\item $f(a)$ results in $\frac{0}{0}$, $\pm \frac{\infty}{\infty}$, or $\infty - \infty$
+	\begin{enumerate}
+		\item Perform some algrebra manipulation on original function
+	\end{enumerate}
+\end{enumerate}
+\begin{center}
+	\begin{tikzpicture}
+		\begin{axis}[
+			axis lines=middle,
+			xtick={-1, 0, ..., 4},
+			ytick={-4, -3, ..., 4},
+			clip=false,
+			restrict y to domain=-5:5,
+			domain=-5:5,
+			]
+			\addplot+[no marks,blue,line width=1pt,samples=150] {x-3};
+			\addplot[mark=*] coordinates {(3,0)};
+			\addplot[mark=*, fill=white] coordinates {(4,1)};
+		\end{axis}
+	\end{tikzpicture}
+\end{center}
+
+\noindent \emph{Theorem 5.1} \textbf{The Squeezing Theorem}: If \emph{f, g, h} are functions such that: $f(x) \leq g(x) \leq h(x)$, then $\forall x$ approaching, but not equal to, a:
+$$ \lim_{x \to a}f(x) \leq \lim_{x \to a}g(x) \leq \lim_{x \to a}h(x) $$
+This Theorem is particularly useful when $f(x) = h(x)$\\ \\
+
+\noindent \emph{Theorem 1.1} A function $f$ is continous on the interval $(a,b)$ if the graph of $y=f(x)$ can be drawn over the interval $(a,b)$ without lifting your pencil.
+\begin{enumerate}
+	\item a function $f$ is continous at $x = a$ if $\lim_{x \to a} f(x) = f(a)$
+	\item a function $f$ is continous on the interval (a, b) if $f$ is continous at every value in $(a, b)$
+	\item a function $f$ is left continous at x = a if $\lim_{x \to a^-} f(x) = f(a)$
+	\item a function $f$ is right continous at x = a if $\lim_{x \to a^+} f(x) = f(a)$
+	\item a function $f$ is continous on the interval $[a, b]$ if $f$ is continous at every value in $(a, b)$, $f$ is right continous at $a$ and left continous at $b$
+	\item a function $f$ is \emph{discontinous} at $x = a$ if $f$ is not continous at $x = a$. We call $a$ a \textbf{discontinuity of $f$}
+	\item Many discontinuities may be classified as either a \textbf{removable, jump, or infinite} discontinuity.
+\end{enumerate}
+\end{document}
